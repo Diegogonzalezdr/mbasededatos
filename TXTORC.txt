@@ -1,0 +1,66 @@
+
+CREATE TABLE Proveedores (
+  CUIT VARCHAR2(15) PRIMARY KEY,
+  Nombre VARCHAR2(255),
+  Direccion VARCHAR2(255),
+  Telefono VARCHAR2(15),
+  PaginaWeb VARCHAR2(255)
+);
+
+
+CREATE TABLE Clientes (
+  CUIT VARCHAR2(15) PRIMARY KEY,
+  Nombre VARCHAR2(255),
+  DireccionCalle VARCHAR2(255),
+  DireccionNumero NUMBER,
+  DireccionComuna VARCHAR2(50),
+  DireccionCiudad VARCHAR2(50)
+);
+
+CREATE TABLE TelefonosClientes (
+  ID NUMBER PRIMARY KEY,
+  CUITCliente VARCHAR2(15),
+  TelefonoContacto VARCHAR2(15),
+  FOREIGN KEY (CUITCliente) REFERENCES Clientes (CUIT)
+);
+
+
+CREATE TABLE CategoriasProductos (
+  ID NUMBER PRIMARY KEY,
+  Nombre VARCHAR2(100),
+  Descripcion VARCHAR2(255)
+);
+
+
+CREATE TABLE Productos (
+  ID NUMBER PRIMARY KEY,
+  Nombre VARCHAR2(255),
+  Precio NUMBER(10, 2),
+  Stock NUMBER,
+  CUITProveedor VARCHAR2(15),
+  IDCategoria NUMBER,
+  FOREIGN KEY (CUITProveedor) REFERENCES Proveedores (CUIT),
+  FOREIGN KEY (IDCategoria) REFERENCES CategoriasProductos (ID)
+);
+
+
+CREATE TABLE Ventas (
+  NumeroFactura NUMBER PRIMARY KEY,
+  Fecha DATE,
+  CUITCliente VARCHAR2(15),
+  Descuento NUMBER(5, 2),
+  MontoFinal NUMBER(10, 2),
+  FOREIGN KEY (CUITCliente) REFERENCES Clientes (CUIT)
+);
+
+
+CREATE TABLE DetallesVentas (
+  ID NUMBER PRIMARY KEY,
+  NumeroFacturaVenta NUMBER,
+  IDProducto NUMBER,
+  PrecioVenta NUMBER(10, 2),
+  CantidadVendida NUMBER,
+  MontoTotal NUMBER(10, 2),
+  FOREIGN KEY (NumeroFacturaVenta) REFERENCES Ventas (NumeroFactura),
+  FOREIGN KEY (IDProducto) REFERENCES Productos (ID)
+);
